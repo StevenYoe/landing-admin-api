@@ -9,10 +9,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing RecipeDetail resources via API
 class RecipeDetailController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the recipe detail resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -35,6 +37,7 @@ class RecipeDetailController extends Controller
 
     /**
      * Get recipe detail by recipe ID.
+     * Returns the detail for a specific recipe if it exists.
      *
      * @param  int  $recipeId
      * @return \Illuminate\Http\JsonResponse
@@ -67,7 +70,8 @@ class RecipeDetailController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created recipe detail resource in storage.
+     * Handles validation, ensures only one detail per recipe, and sets created_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -139,7 +143,7 @@ class RecipeDetailController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified recipe detail resource by ID, including recipe relationship.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -163,7 +167,8 @@ class RecipeDetailController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified recipe detail resource in storage.
+     * Handles validation and sets updated_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -234,7 +239,7 @@ class RecipeDetailController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified recipe detail resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -259,7 +264,7 @@ class RecipeDetailController extends Controller
     }
     
     /**
-     * Get employee ID from user ID
+     * Get employee ID from user ID (private helper method).
      *
      * @param int $userId
      * @return string

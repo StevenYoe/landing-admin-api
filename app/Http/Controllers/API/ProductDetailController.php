@@ -1,6 +1,5 @@
 <?php
 
-// 1. Updated ProductDetailController.php
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
@@ -10,10 +9,12 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing ProductDetail resources via API
 class ProductDetailController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the product detail resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -36,6 +37,7 @@ class ProductDetailController extends Controller
 
     /**
      * Get product detail by product ID.
+     * Returns the detail for a specific product if it exists.
      *
      * @param  int  $productId
      * @return \Illuminate\Http\JsonResponse
@@ -68,7 +70,8 @@ class ProductDetailController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created product detail resource in storage.
+     * Handles validation, ensures only one detail per product, and sets created_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -140,7 +143,7 @@ class ProductDetailController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified product detail resource by ID, including product relationship.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -164,7 +167,8 @@ class ProductDetailController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified product detail resource in storage.
+     * Handles validation and sets updated_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -235,7 +239,7 @@ class ProductDetailController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified product detail resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -260,7 +264,7 @@ class ProductDetailController extends Controller
     }
     
     /**
-     * Get employee ID from user ID
+     * Get employee ID from user ID (private helper method).
      *
      * @param int $userId
      * @return string

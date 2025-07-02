@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing Popup resources via API
 class PopupController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the popup resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -33,7 +35,8 @@ class PopupController extends Controller
     }
     
     /**
-     * Get all popups without pagination
+     * Get all popups without pagination.
+     * Useful for dropdowns or full lists.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -49,7 +52,8 @@ class PopupController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created popup resource in storage.
+     * Handles validation and image upload. New popups are set to inactive by default.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -93,7 +97,7 @@ class PopupController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified popup resource by ID.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -117,7 +121,8 @@ class PopupController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified popup resource in storage.
+     * Handles validation, image replacement, and ensures only one popup is active at a time.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -184,7 +189,8 @@ class PopupController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified popup resource from storage.
+     * Also deletes the associated image file if it exists.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -214,7 +220,8 @@ class PopupController extends Controller
     }
     
     /**
-     * Deactivate all popups except the specified one
+     * Deactivate all popups except the specified one.
+     * Useful for ensuring only one popup is active at a time.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse

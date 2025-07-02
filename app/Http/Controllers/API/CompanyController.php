@@ -8,6 +8,7 @@ use App\Models\Header;
 use App\Models\CompanyProfile;
 use App\Models\History;
 
+// Controller for handling company page related API endpoints
 class CompanyController extends Controller
 {
     /**
@@ -27,15 +28,16 @@ class CompanyController extends Controller
                 $header = Header::first();
             }
             
-            // Get company profile sections by types
+            // Get company profile sections by their types (what, policy, vision, mission)
             $companyWhat = CompanyProfile::where('cp_type', 'what')->first();
             $companyPolicy = CompanyProfile::where('cp_type', 'policy')->first();
             $companyVision = CompanyProfile::where('cp_type', 'vision')->first();
             $companyMission = CompanyProfile::where('cp_type', 'mission')->first();
             
-            // Get all histories ordered by year
+            // Get all company history records ordered by year
             $histories = History::orderBy('hs_year', 'asc')->get();
             
+            // Aggregate all company page data into a single array
             $companyData = [
                 'header' => $header,
                 'company_what' => $companyWhat,
@@ -45,11 +47,13 @@ class CompanyController extends Controller
                 'company_mission' => $companyMission
             ];
             
+            // Return the company data as a JSON response
             return response()->json([
                 'success' => true,
                 'data' => $companyData
             ]);
         } catch (\Exception $e) {
+            // Handle any exceptions and return an error response
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching company data',

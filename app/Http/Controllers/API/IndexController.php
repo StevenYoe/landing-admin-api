@@ -13,10 +13,11 @@ use App\Models\RecipeCategory;
 use App\Models\WhyPazar;
 use Carbon\Carbon;
 
+// Controller for providing all data needed for the index (landing) page
 class IndexController extends Controller
 {
     /**
-     * Get all data needed for the index page
+     * Get all data needed for the index page, including popup, header, product categories, why pazar items, and the latest recipe.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -24,11 +25,10 @@ class IndexController extends Controller
     public function getIndexData(Request $request)
     {
         try {
-            // Get active popup
+            // Get active popup for the index page
             $popup = Popup::where('pu_is_active', true)->first();
             
-            // Get header specifically for the index page
-            // Extract page_name from request or default to 'index'
+            // Get header for the index page, using page_name from request or default to 'index'
             $pageName = $request->input('page_name', 'index');
             $header = Header::where('h_page_name', $pageName)->first();
             
@@ -37,19 +37,19 @@ class IndexController extends Controller
                 $header = Header::first();
             }
             
-            // Get product categories
+            // Get all product categories
             $productCategories = ProductCategory::get();
             
-            // Get all "Why Pazar" items
+            // Get all 'Why Pazar' items
             $whyPazarItems = WhyPazar::all();
             
-            // Get latest recipe
+            // Get the latest active recipe with its categories
             $latestRecipe = Recipe::with(['categories'])
                 ->where('r_is_active', true)
                 ->orderBy('r_created_at', 'desc')
                 ->first();
             
-            // Format recipe with category names if available
+            // Format the latest recipe with category names if available
             $formattedLatestRecipe = null;
             if ($latestRecipe) {
                 $categoryNames = [];
@@ -70,6 +70,7 @@ class IndexController extends Controller
                 ];
             }
             
+            // Aggregate all index page data into a single array
             $indexData = [
                 'popup' => $popup,
                 'header' => $header,
@@ -78,11 +79,13 @@ class IndexController extends Controller
                 'latest_recipe' => $formattedLatestRecipe
             ];
             
+            // Return the index data as a JSON response
             return response()->json([
                 'success' => true,
                 'data' => $indexData
             ]);
         } catch (\Exception $e) {
+            // Handle any exceptions and return an error response
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching index data',

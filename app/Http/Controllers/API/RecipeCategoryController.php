@@ -7,10 +7,12 @@ use App\Models\RecipeCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing RecipeCategory resources via API
 class RecipeCategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the recipe category resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -32,7 +34,8 @@ class RecipeCategoryController extends Controller
     }
     
     /**
-     * Get all recipe categories without pagination
+     * Get all recipe categories without pagination.
+     * Useful for dropdowns or full lists.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -49,7 +52,8 @@ class RecipeCategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created recipe category resource in storage.
+     * Handles validation.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -79,7 +83,7 @@ class RecipeCategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified recipe category resource by ID.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -103,7 +107,8 @@ class RecipeCategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified recipe category resource in storage.
+     * Handles validation.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -143,7 +148,8 @@ class RecipeCategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified recipe category resource from storage.
+     * Prevents deletion if category has related recipes in the junction table.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse

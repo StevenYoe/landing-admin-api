@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing Certification resources via API
 class CertificationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the certification resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -33,7 +35,8 @@ class CertificationController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created certification resource in storage.
+     * Handles validation and image upload.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -81,7 +84,7 @@ class CertificationController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified certification resource by ID.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -105,7 +108,8 @@ class CertificationController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified certification resource in storage.
+     * Handles validation and image replacement.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -168,7 +172,8 @@ class CertificationController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified certification resource from storage.
+     * Also deletes the associated image file if it exists.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse

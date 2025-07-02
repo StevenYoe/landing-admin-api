@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+// Import all API controllers for route definitions
 use App\Http\Controllers\API\DashboardController;
 use App\Http\Controllers\API\HealthController;
 use App\Http\Controllers\API\HeaderController;
@@ -31,126 +32,102 @@ use App\Http\Controllers\API\CareerInfoController;
 use App\Http\Controllers\API\WorkAtPazarController;
 use App\Http\Controllers\API\CareerController;
 
+// -----------------------------
+// API ROUTES CONFIGURATION FILE
+// -----------------------------
+// This file defines all API endpoints for the application.
+// It organizes routes for public and authenticated access, and groups related endpoints by feature/module.
+//
+// - Public endpoints: Health check, token validation
+// - Authenticated endpoints: All business logic, CRUD, and data retrieval for the admin panel and frontend
+// - Uses route groups and middleware for access control
+// - Follows RESTful conventions with apiResource where possible
+
 // Health check endpoint - public
 Route::get('/health', [HealthController::class, 'check']);
 
-// Token validation endpoint - public tanpa middleware
+// Token validation endpoint - public, no middleware
 Route::get('/validate-token', [AuthController::class, 'validateToken']);
 
-// Semua endpoint yang memerlukan autentikasi
+// All endpoints that require authentication
 Route::middleware(['api'])->group(function () {
-    // Dashboard - tidak menggunakan auth:sanctum untuk sementara
+    // Dashboard statistics endpoints
     Route::get('/dashboard/statistics', [DashboardController::class, 'getStatistics']);
     Route::get('/vacancies/statistics', [DashboardController::class, 'getVacancyStatistics']);
     
-    // Index Page Data
+    // Index, brand, and company data endpoints
     Route::get('/index/data', [IndexController::class, 'getIndexData']);
-    
-    // Brand Page Data
     Route::get('/brand/data', [BrandController::class, 'getBrandData']);
-    
-    // Company Page Data
     Route::get('/company/data', [CompanyController::class, 'getCompanyData']);
     
-    // Headers
+    // Header and footer endpoints
     Route::apiResource('headers', HeaderController::class);
-    
-    // Footers
     Route::get('/footers', [FooterController::class, 'all']);
     Route::apiResource('footers', FooterController::class);
     
-    // Popups
+    // Popup endpoints
     Route::apiResource('popups', PopupController::class);
-    
     Route::post('/popups/deactivate-others', [PopupController::class, 'deactivateOthers']);
     
-    // Product Categories
+    // Product category, product, and catalog endpoints
     Route::get('/productcategories/all', [ProductCategoryController::class, 'all']);
     Route::apiResource('productcategories', ProductCategoryController::class);
-    
-    // Products
     Route::get('/products/getAllProducts', [ProductController::class, 'all']);
     Route::apiResource('products', ProductController::class);
-
-    // Product Catalogs
     Route::get('/productcatalogs/all', [ProductCatalogController::class, 'all']);
     Route::get('/productcatalogs/by-language', [ProductCatalogController::class, 'getCatalogByLanguage']);
     Route::apiResource('productcatalogs', ProductCatalogController::class);
-    
-    // Product Details
     Route::get('/productdetails/by-product/{productId}', [ProductDetailController::class, 'getByProductId']);
     Route::apiResource('productdetails', ProductDetailController::class);
     
-    // Recipe Categories
+    // Recipe category, recipe, and detail endpoints
     Route::get('/recipecategories/all', [RecipeCategoryController::class, 'all']);
     Route::apiResource('recipecategories', RecipeCategoryController::class);
-    
-    // Recipes
-    Route::get('/recipes/getAllRecipes', [RecipeController::class, 'all']); // Changed route name
+    Route::get('/recipes/getAllRecipes', [RecipeController::class, 'all']); // All recipes
     Route::apiResource('recipes', RecipeController::class);
     Route::get('/recipes/by-category/{categoryId}', [RecipeController::class, 'getByCategory']);
-    
-    // Recipe Details
     Route::get('/recipedetails/by-recipe/{recipeId}', [RecipeDetailController::class, 'getByRecipeId']);
     Route::apiResource('recipedetails', RecipeDetailController::class);
     
-    // Certifications
+    // Certification endpoints
     Route::apiResource('certifications', CertificationController::class);
     
-    // Company Profiles
+    // Company profile endpoints
     Route::get('/companyprofiles/all', [CompanyProfileController::class, 'all']);
     Route::apiResource('companyprofiles', CompanyProfileController::class);
     Route::get('/companyprofiles/type/{type}', [CompanyProfileController::class, 'getByType']);
     
-    // Histories
+    // History endpoints
     Route::get('/histories/all', [HistoryController::class, 'all']);
     Route::apiResource('histories', HistoryController::class);
     
-    // Testimonials
+    // Testimonial endpoints
     Route::get('/testimonials/all', [TestimonialController::class, 'all']);
     Route::apiResource('testimonials', TestimonialController::class);
     Route::get('/testimonials/type/{type}', [TestimonialController::class, 'getByType']);
     
-    // Why Pazar
+    // Why Pazar endpoints
     Route::get('/whypazars/all', [WhyPazarController::class, 'all']);
     Route::apiResource('whypazars', WhyPazarController::class);
     
-    // Career Module Routes
-    
-    // Departments
+    // Career module endpoints (departments, employments, experiences, vacancies, work at pazar, career info, career page)
     Route::get('/departments/all', [DepartmentController::class, 'all']);
     Route::apiResource('departments', DepartmentController::class);
-    
-    // Employments
     Route::get('/employments/all', [EmploymentController::class, 'all']);
     Route::apiResource('employments', EmploymentController::class);
-    
-    // Experiences
     Route::get('/experiences/all', [ExperienceController::class, 'all']);
     Route::apiResource('experiences', ExperienceController::class);
-    
-    // Vacancies
     Route::get('/vacancies/all', [VacancyController::class, 'all']);
-    
-    // Fix: Define the active vacancies route BEFORE the resource route
+    // Define the active vacancies route BEFORE the resource route
     Route::get('/vacancies/active', [VacancyController::class, 'getActiveVacancies']);
-    
     Route::apiResource('vacancies', VacancyController::class);
-    
-    // In your routes/api.php file
     Route::get('vacancies/getVacancyDetail/{identifier}', [VacancyController::class, 'getVacancyDetail']);
     Route::get('vacancies/getRelatedVacancies', [VacancyController::class, 'getRelatedVacancies']);
     Route::get('/vacancies/check-expired', [VacancyController::class, 'checkExpiredVacancies']);
-    
-    // Work At Pazars
     Route::get('/workatpazars/all', [WorkAtPazarController::class, 'all']);
     Route::apiResource('workatpazars', WorkAtPazarController::class);
     Route::get('/workatpazars/type/{type}', [WorkAtPazarController::class, 'getByType']);
-    
-    // Career Infos
     Route::get('/careerinfos/all', [CareerInfoController::class, 'all']);
     Route::apiResource('careerinfos', CareerInfoController::class);
-    
-    // Career Page Data
     Route::get('/career/data', [CareerController::class, 'getIndexData']);
 });

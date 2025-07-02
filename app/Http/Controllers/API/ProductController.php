@@ -11,10 +11,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+// Controller for managing Product resources via API
 class ProductController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the product resources.
+     * Supports filtering by category and active status, sorting, and pagination.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -52,8 +54,8 @@ class ProductController extends Controller
     }
     
     /**
-     * Get all products without pagination - FIXED to properly include category
-     * and support filtering and sorting
+     * Get all products without pagination, including category, with optional filtering and sorting.
+     * Useful for dropdowns or full lists.
      *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -91,7 +93,8 @@ class ProductController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created product resource in storage.
+     * Handles validation, image upload, and sets created_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -165,7 +168,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified product resource by ID, including category, detail, createdBy, and updatedBy relationships.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -189,7 +192,8 @@ class ProductController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified product resource in storage.
+     * Handles validation, image replacement, and sets updated_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -281,7 +285,8 @@ class ProductController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified product resource from storage.
+     * Also deletes the associated image file and related detail if it exists.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -316,7 +321,7 @@ class ProductController extends Controller
     }
     
     /**
-     * Get employee ID from user ID
+     * Get employee ID from user ID (private helper method).
      *
      * @param int $userId
      * @return string
@@ -335,8 +340,9 @@ class ProductController extends Controller
     }
     
     /**
-     * Get all products for the frontend - Custom endpoint
-     * 
+     * Get all products for the frontend - Custom endpoint.
+     * Useful for populating dropdowns or lists in the frontend.
+     *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */

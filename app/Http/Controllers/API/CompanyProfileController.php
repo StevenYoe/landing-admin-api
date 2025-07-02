@@ -7,10 +7,12 @@ use App\Models\CompanyProfile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing CompanyProfile resources via API
 class CompanyProfileController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the company profile resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -32,7 +34,8 @@ class CompanyProfileController extends Controller
     }
     
     /**
-     * Get all company profiles without pagination
+     * Get all company profiles without pagination.
+     * Useful for dropdowns or full lists.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -48,7 +51,8 @@ class CompanyProfileController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created company profile resource in storage.
+     * Handles validation.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -79,7 +83,7 @@ class CompanyProfileController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified company profile resource by ID.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -103,7 +107,8 @@ class CompanyProfileController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified company profile resource in storage.
+     * Handles validation.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -144,7 +149,7 @@ class CompanyProfileController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified company profile resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -169,7 +174,7 @@ class CompanyProfileController extends Controller
     }
     
     /**
-     * Get company profile by type
+     * Get company profile by type (e.g., what, policy, vision, mission)
      *
      * @param  string  $type
      * @return \Illuminate\Http\JsonResponse

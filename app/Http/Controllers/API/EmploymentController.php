@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+// Controller for managing Employment resources via API
 class EmploymentController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the employment resources.
+     * Supports sorting, filtering by active status, and pagination.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -41,7 +43,8 @@ class EmploymentController extends Controller
     }
     
     /**
-     * Get all employments without pagination
+     * Get all employments without pagination.
+     * Useful for dropdowns or full lists, with optional filtering and sorting.
      *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -73,7 +76,8 @@ class EmploymentController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created employment resource in storage.
+     * Handles validation, sets created_by using employee_id or user_id, and removes unnecessary fields.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -132,7 +136,7 @@ class EmploymentController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified employment resource by ID, including createdBy and updatedBy relationships.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -156,7 +160,8 @@ class EmploymentController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified employment resource in storage.
+     * Handles validation, sets updated_by using employee_id or user_id, and removes unnecessary fields.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -225,7 +230,8 @@ class EmploymentController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified employment resource from storage.
+     * Prevents deletion if employment has related vacancies.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -258,8 +264,9 @@ class EmploymentController extends Controller
     }
     
     /**
-     * Get all employments for the frontend - Custom endpoint
-     * 
+     * Get all employments for the frontend - Custom endpoint.
+     * Useful for populating dropdowns or lists in the frontend.
+     *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */

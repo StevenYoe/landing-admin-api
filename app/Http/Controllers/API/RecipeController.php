@@ -12,10 +12,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+// Controller for managing Recipe resources via API
 class RecipeController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the recipe resources.
+     * Supports filtering by category and active status, sorting, and pagination.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -55,9 +57,10 @@ class RecipeController extends Controller
     }
     
     /**
-     * Get all recipes without pagination
+     * Get all recipes without pagination, including categories, with optional filtering and sorting.
+     * Useful for dropdowns or full lists.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function all(Request $request)
@@ -95,7 +98,8 @@ class RecipeController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created recipe resource in storage.
+     * Handles validation, image upload, category attachment, and sets created_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -157,7 +161,7 @@ class RecipeController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified recipe resource by ID, including categories, detail, createdBy, and updatedBy relationships.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -181,7 +185,8 @@ class RecipeController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified recipe resource in storage.
+     * Handles validation, image replacement, category sync, and sets updated_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -261,7 +266,8 @@ class RecipeController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified recipe resource from storage.
+     * Also deletes the associated image file, detail, and detaches categories if they exist.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -300,6 +306,7 @@ class RecipeController extends Controller
     
     /**
      * Get recipes by category.
+     * Returns all active recipes for a given category.
      *
      * @param  int  $categoryId
      * @return \Illuminate\Http\JsonResponse
@@ -328,8 +335,9 @@ class RecipeController extends Controller
     }
     
     /**
-     * Get all recipes for the frontend - Custom endpoint
-     * 
+     * Get all recipes for the frontend - Custom endpoint.
+     * Useful for populating dropdowns or lists in the frontend.
+     *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
@@ -368,7 +376,7 @@ class RecipeController extends Controller
     }
     
     /**
-     * Get employee ID from user ID
+     * Get employee ID from user ID (private helper method).
      *
      * @param int $userId
      * @return string

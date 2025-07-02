@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing ProductCategory resources via API
 class ProductCategoryController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the product category resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -33,7 +35,8 @@ class ProductCategoryController extends Controller
     }
     
     /**
-     * Get all product categories without pagination
+     * Get all product categories without pagination.
+     * Useful for dropdowns or full lists.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -50,7 +53,8 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created product category resource in storage.
+     * Handles validation and image upload.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -93,7 +97,7 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified product category resource by ID.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -117,7 +121,8 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified product category resource in storage.
+     * Handles validation and image replacement.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -178,7 +183,8 @@ class ProductCategoryController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified product category resource from storage.
+     * Prevents deletion if category has related products and deletes the associated image file if it exists.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse

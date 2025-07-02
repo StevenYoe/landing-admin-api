@@ -11,14 +11,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Illuminate\Support\Carbon;
 
+// VacancyController handles all API operations related to job vacancies, including CRUD, filtering, and business logic for expiration.
 class VacancyController extends Controller
 {
-    // Simpan semua method yang ada sebelumnya...
+    // This controller handles all API operations related to job vacancies, including CRUD, filtering, and special queries.
     
     /**
      * Check and inactive expired vacancies manually.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * This method finds all active vacancies whose closed date is before today and marks them as inactive.
+     * Used for manual triggering of the expiration process.
      */
     public function checkExpiredVacancies()
     {
@@ -49,10 +50,8 @@ class VacancyController extends Controller
     }
     
     /**
-     * A middleware check that can be called at the beginning of relevant methods
-     * to automatically check for expired vacancies before processing the request.
-     *
-     * @return void
+     * Middleware-like method to automatically inactivate expired vacancies before processing requests.
+     * Should be called at the start of relevant methods to ensure data consistency.
      */
     private function autoCheckExpiredVacancies()
     {
@@ -70,9 +69,9 @@ class VacancyController extends Controller
     }
     
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * Display a paginated list of vacancies, with optional filters and sorting.
+     * Filters include department, employment, experience, active status, and urgency.
+     * Calls autoCheckExpiredVacancies() to ensure expired jobs are not shown as active.
      */
     public function index(Request $request)
     {
@@ -124,10 +123,8 @@ class VacancyController extends Controller
     }
     
     /**
-     * Get all vacancies without pagination
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * Get all vacancies without pagination, with optional filters.
+     * Useful for exporting or displaying all data at once.
      */
     public function all(Request $request)
     {
@@ -178,10 +175,9 @@ class VacancyController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * Store a newly created vacancy in the database.
+     * Validates input, determines the creator (employee_id), and saves the vacancy.
+     * Returns the created vacancy with its relationships.
      */
     public function store(Request $request)
     {
@@ -253,10 +249,7 @@ class VacancyController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Display a single vacancy by its ID, including related department, employment, and experience data.
      */
     public function show($id)
     {
@@ -277,11 +270,9 @@ class VacancyController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Update an existing vacancy by its ID.
+     * Validates input, determines the updater (employee_id), and updates the vacancy.
+     * Returns the updated vacancy with its relationships.
      */
     public function update(Request $request, $id)
     {
@@ -362,10 +353,8 @@ class VacancyController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Delete a vacancy by its ID.
+     * Returns a success message if deletion is successful.
      */
     public function destroy($id)
     {
@@ -387,10 +376,8 @@ class VacancyController extends Controller
     }
     
     /**
-     * Get all active vacancies for the frontend
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * Get all active vacancies for the frontend, filtered by department, employment, experience, and urgency.
+     * Only vacancies that are active and within the posting/closing date range are returned.
      */
     public function getActiveVacancies(Request $request)
     {
@@ -441,10 +428,8 @@ class VacancyController extends Controller
     }
     
     /**
-     * Get vacancy details by ID or slug
-     *
-     * @param string|int $identifier Vacancy ID or slug
-     * @return \Illuminate\Http\JsonResponse
+     * Get details of a vacancy by its ID or slug (URL-friendly title).
+     * Supports both numeric IDs and string slugs for flexible frontend routing.
      */
     public function getVacancyDetail($identifier)
     {
@@ -478,12 +463,8 @@ class VacancyController extends Controller
     }
     
     /**
-     * Get related vacancies by department ID
-     *
-     * @param int $departmentId Department ID
-     * @param int $currentVacancyId Current vacancy ID to exclude
-     * @param int $limit Maximum number of related vacancies to return
-     * @return \Illuminate\Http\JsonResponse
+     * Get related vacancies by department, excluding the current vacancy.
+     * Returns a random selection of related jobs, useful for recommendations.
      */
     public function getRelatedVacancies(Request $request)
     {
@@ -525,10 +506,8 @@ class VacancyController extends Controller
     }
     
     /**
-     * Get employee ID from user ID
-     *
-     * @param int $userId
-     * @return string
+     * Helper method to get employee ID from a user ID.
+     * Returns the employee ID if available, otherwise returns the user ID as a string.
      */
     private function getEmployeeIdFromUserId($userId)
     {

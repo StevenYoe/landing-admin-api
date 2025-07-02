@@ -19,10 +19,12 @@ use App\Models\Experience;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 
+// Controller for providing dashboard statistics for the API
 class DashboardController extends Controller
 {
     /**
-     * Get dashboard statistics
+     * Get dashboard statistics for products, categories, certifications, histories, whyPazars, and recipes.
+     * Includes counts, recent items, and grouped statistics for dashboard display.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -30,7 +32,7 @@ class DashboardController extends Controller
     public function getStatistics(Request $request)
     {
         try {
-            // Tangani query DB dengan proper error handling
+            // Handle DB queries with proper error handling
             $totalProducts = Product::count();
             $totalCategories = ProductCategory::count();
             $totalCertifications = Certification::count();
@@ -42,7 +44,7 @@ class DashboardController extends Controller
             $currentMonth = Carbon::now()->startOfMonth();
             $newProductsThisMonth = Product::where('p_created_at', '>=', $currentMonth)->count();
             
-            // Ambil recent products dengan try-catch terpisah
+            // Get recent products with category info (try-catch for safety)
             try {
                 $recentProducts = Product::with(['category'])
                     ->orderBy('p_created_at', 'desc')
@@ -61,7 +63,7 @@ class DashboardController extends Controller
                 $recentProducts = [];
             }
             
-            // Ambil products by category dengan try-catch terpisah
+            // Get products grouped by category (try-catch for safety)
             try {
                 $productsByCategory = ProductCategory::select('pc_id', 'pc_title_id')
                     ->withCount(['products as product_count' => function ($query) {
@@ -82,13 +84,13 @@ class DashboardController extends Controller
                 // Get new recipes from current month
                 $newRecipesThisMonth = Recipe::where('r_created_at', '>=', $currentMonth)->count();
                 
-                // Get latest recipes
+                // Get latest recipes with all categories
                 $latestRecipes = Recipe::with(['categories'])
                 ->orderBy('r_created_at', 'desc')
                 ->take(10)
                 ->get()
                 ->map(function ($recipe) {
-                    // Get all categories instead of just the first one
+                    // Get all categories for each recipe
                     $categoryNames = [];
                     if ($recipe->categories->isNotEmpty()) {
                         foreach ($recipe->categories as $category) {
@@ -106,7 +108,7 @@ class DashboardController extends Controller
                     ];
                 });
                 
-                // Get recipes by category
+                // Get recipes grouped by category
                 $recipesByCategory = RecipeCategory::select('rc_id', 'rc_title_id')
                     ->withCount(['recipes as recipe_count' => function ($query) {
                         $query->where('r_is_active', true);
@@ -123,6 +125,7 @@ class DashboardController extends Controller
                 $recipesByCategory = [];
             }
             
+            // Aggregate all statistics for dashboard
             $statistics = [
                 'total_products' => $totalProducts,
                 'total_categories' => $totalCategories,
@@ -143,11 +146,13 @@ class DashboardController extends Controller
                 'recipes_by_category' => $recipesByCategory
             ];
             
+            // Return the statistics as a JSON response
             return response()->json([
                 'success' => true,
                 'data' => $statistics
             ]);
         } catch (\Exception $e) {
+            // Handle any exceptions and return an error response
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching dashboard statistics',
@@ -157,7 +162,8 @@ class DashboardController extends Controller
     }
 
     /**
-     * Get vacancy statistics for HR dashboard
+     * Get vacancy statistics for HR dashboard.
+     * Includes counts, latest vacancies, and grouped statistics for dashboard display.
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -165,13 +171,9 @@ class DashboardController extends Controller
     public function getVacancyStatistics(Request $request)
     {
         try {
-            // Count total vacancies
+            // Count total, active, and urgent vacancies
             $totalVacancies = Vacancy::count();
-            
-            // Count active vacancies
             $activeVacancies = Vacancy::where('v_is_active', true)->count();
-            
-            // Count urgent vacancies
             $urgentVacancies = Vacancy::where('v_urgent', true)
                 ->where('v_is_active', true)
                 ->count();
@@ -181,7 +183,7 @@ class DashboardController extends Controller
             $totalEmployments = Employment::count();
             $totalExperiences = Experience::count();
             
-            // Get latest vacancies with relationships
+            // Get latest vacancies with relationships (try-catch for safety)
             try {
                 $latestVacancies = Vacancy::with(['department', 'employment', 'experience'])
                     ->orderBy('v_created_at', 'desc')
@@ -206,7 +208,7 @@ class DashboardController extends Controller
                 $latestVacancies = [];
             }
             
-            // Get vacancies by department
+            // Get vacancies grouped by department (try-catch for safety)
             try {
                 $vacanciesByDepartment = Department::select('da_id', 'da_title_en')
                     ->withCount(['vacancies as vacancy_count' => function ($query) {
@@ -218,6 +220,7 @@ class DashboardController extends Controller
                 $vacanciesByDepartment = [];
             }
             
+            // Aggregate all statistics for HR dashboard
             $statistics = [
                 'total_vacancies' => $totalVacancies,
                 'active_vacancies' => $activeVacancies,
@@ -229,12 +232,14 @@ class DashboardController extends Controller
                 'vacancies_by_department' => $vacanciesByDepartment
             ];
             
+            // Return the statistics as a JSON response
             return response()->json([
                 'success' => true,
                 'data' => $statistics
             ]);
             
         } catch (\Exception $e) {
+            // Handle any exceptions and return an error response
             return response()->json([
                 'success' => false,
                 'message' => 'Error fetching vacancy statistics',

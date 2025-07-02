@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing Testimonial resources via API
 class TestimonialController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the testimonial resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -33,7 +35,8 @@ class TestimonialController extends Controller
     }
     
     /**
-     * Get all testimonials without pagination
+     * Get all testimonials without pagination.
+     * Useful for dropdowns or full lists.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -49,7 +52,8 @@ class TestimonialController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created testimonial resource in storage.
+     * Handles validation and image upload.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -93,7 +97,7 @@ class TestimonialController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified testimonial resource by ID.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -117,7 +121,8 @@ class TestimonialController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified testimonial resource in storage.
+     * Handles validation and image replacement.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -184,7 +189,8 @@ class TestimonialController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified testimonial resource from storage.
+     * Also deletes the associated image file if it exists.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -214,7 +220,8 @@ class TestimonialController extends Controller
     }
     
     /**
-     * Get testimonial by type
+     * Get testimonials by type (e.g., customer, chef).
+     * Returns all testimonials for a given type.
      *
      * @param  string  $type
      * @return \Illuminate\Http\JsonResponse

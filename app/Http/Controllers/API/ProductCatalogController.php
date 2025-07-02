@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 
+// Controller for managing ProductCatalog resources via API
 class ProductCatalogController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the product catalog resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -39,7 +41,8 @@ class ProductCatalogController extends Controller
     }
     
     /**
-     * Get all product catalogs without pagination
+     * Get all product catalogs without pagination.
+     * Useful for dropdowns or full lists, with optional sorting.
      *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -65,7 +68,8 @@ class ProductCatalogController extends Controller
     }
 
     /**
-     * Get catalog by language
+     * Get the latest product catalog file by language (ID or EN).
+     * Returns the file URL and name for download.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -117,7 +121,8 @@ class ProductCatalogController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created product catalog resource in storage.
+     * Handles validation, file upload, and sets created_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -187,7 +192,7 @@ class ProductCatalogController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified product catalog resource by ID, including createdBy and updatedBy relationships.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -211,7 +216,8 @@ class ProductCatalogController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified product catalog resource in storage.
+     * Handles validation, file replacement, and sets updated_by using employee_id or user_id.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -299,7 +305,8 @@ class ProductCatalogController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified product catalog resource from storage.
+     * Also deletes the associated file if it exists.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -329,7 +336,7 @@ class ProductCatalogController extends Controller
     }
     
     /**
-     * Get employee ID from user ID
+     * Get employee ID from user ID (private helper method).
      *
      * @param int $userId
      * @return string

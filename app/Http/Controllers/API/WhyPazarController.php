@@ -8,12 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+// WhyPazarController manages CRUD operations for the WhyPazar resource, including image upload and deletion logic.
 class WhyPazarController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * Display a paginated list of WhyPazar items.
+     * Supports sorting and pagination via request parameters.
      */
     public function index(Request $request)
     {
@@ -33,9 +33,8 @@ class WhyPazarController extends Controller
     }
     
     /**
-     * Get all why pazar items without pagination
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * Get all WhyPazar items without pagination.
+     * Useful for exporting or displaying all data at once.
      */
     public function all()
     {
@@ -49,10 +48,9 @@ class WhyPazarController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * Store a newly created WhyPazar item in the database.
+     * Handles validation and optional image upload.
+     * Returns the created item.
      */
     public function store(Request $request)
     {
@@ -92,10 +90,8 @@ class WhyPazarController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Display a single WhyPazar item by its ID.
+     * Returns 404 if the item does not exist.
      */
     public function show($id)
     {
@@ -116,11 +112,9 @@ class WhyPazarController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Update an existing WhyPazar item by its ID.
+     * Handles validation, optional image replacement, and image deletion if a new image is uploaded.
+     * If 'keep_current_image' is set, the image is not changed.
      */
     public function update(Request $request, $id)
     {
@@ -182,10 +176,8 @@ class WhyPazarController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Delete a WhyPazar item by its ID.
+     * Also deletes the associated image from storage if it exists.
      */
     public function destroy($id)
     {

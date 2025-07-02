@@ -7,12 +7,12 @@ use App\Models\WorkAtPazar;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
+// WorkAtPazarController manages CRUD operations for the WorkAtPazar resource, including filtering by type.
 class WorkAtPazarController extends Controller
 {
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * Display a paginated list of WorkAtPazar items.
+     * Supports sorting and pagination via request parameters.
      */
     public function index(Request $request)
     {
@@ -32,9 +32,8 @@ class WorkAtPazarController extends Controller
     }
     
     /**
-     * Get all work at pazar items without pagination
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * Get all WorkAtPazar items without pagination.
+     * Useful for exporting or displaying all data at once.
      */
     public function all()
     {
@@ -48,10 +47,9 @@ class WorkAtPazarController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\JsonResponse
+     * Store a newly created WorkAtPazar item in the database.
+     * Handles validation and saves the item.
+     * Returns the created item.
      */
     public function store(Request $request)
     {
@@ -81,10 +79,8 @@ class WorkAtPazarController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Display a single WorkAtPazar item by its ID.
+     * Returns 404 if the item does not exist.
      */
     public function show($id)
     {
@@ -105,11 +101,9 @@ class WorkAtPazarController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Update an existing WorkAtPazar item by its ID.
+     * Handles validation and updates the item.
+     * Returns the updated item.
      */
     public function update(Request $request, $id)
     {
@@ -148,10 +142,8 @@ class WorkAtPazarController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\JsonResponse
+     * Delete a WorkAtPazar item by its ID.
+     * Returns a success message if deletion is successful.
      */
     public function destroy($id)
     {
@@ -173,10 +165,8 @@ class WorkAtPazarController extends Controller
     }
     
     /**
-     * Get work at pazar items by type
-     *
-     * @param  string  $type
-     * @return \Illuminate\Http\JsonResponse
+     * Get WorkAtPazar items filtered by type.
+     * Useful for displaying items of a specific category or section.
      */
     public function getByType($type)
     {

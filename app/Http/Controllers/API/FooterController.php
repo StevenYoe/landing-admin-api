@@ -8,10 +8,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 
+// Controller for managing Footer resources via API
 class FooterController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the footer resources.
+     * Supports sorting and pagination via query parameters.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -33,7 +35,8 @@ class FooterController extends Controller
     }
     
     /**
-     * Get all footers without pagination
+     * Get all footers without pagination.
+     * Useful for dropdowns or full lists.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -49,7 +52,8 @@ class FooterController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created footer resource in storage.
+     * Handles validation and icon file upload.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -94,7 +98,7 @@ class FooterController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified footer resource by ID.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -118,7 +122,8 @@ class FooterController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified footer resource in storage.
+     * Handles validation and icon file replacement.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -187,7 +192,8 @@ class FooterController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified footer resource from storage.
+     * Also deletes the associated icon file if it exists.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse

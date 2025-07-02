@@ -10,10 +10,12 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 
+// Controller for managing Experience resources via API
 class ExperienceController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Display a paginated listing of the experience resources.
+     * Supports searching, sorting, and pagination.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -48,7 +50,8 @@ class ExperienceController extends Controller
     }
     
     /**
-     * Get all experiences without pagination
+     * Get all experiences without pagination.
+     * Useful for dropdowns or full lists, with optional searching and sorting.
      *
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -83,7 +86,8 @@ class ExperienceController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created experience resource in storage.
+     * Handles validation, sets created_by using employee_id or user_id, and removes unnecessary fields.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
@@ -141,7 +145,7 @@ class ExperienceController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified experience resource by ID, including createdBy and updatedBy relationships.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -165,7 +169,8 @@ class ExperienceController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified experience resource in storage.
+     * Handles validation, sets updated_by using employee_id or user_id, and removes unnecessary fields.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  int  $id
@@ -233,7 +238,8 @@ class ExperienceController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified experience resource from storage.
+     * Prevents deletion if experience has related vacancies.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -266,7 +272,7 @@ class ExperienceController extends Controller
     }
     
     /**
-     * Get employee ID from user ID
+     * Get employee ID from user ID (private helper method).
      *
      * @param int $userId
      * @return string
@@ -285,8 +291,9 @@ class ExperienceController extends Controller
     }
     
     /**
-     * Get all experiences for the frontend - Custom endpoint
-     * 
+     * Get all experiences for the frontend - Custom endpoint.
+     * Useful for populating dropdowns or lists in the frontend.
+     *
      * @param \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\JsonResponse
      */
