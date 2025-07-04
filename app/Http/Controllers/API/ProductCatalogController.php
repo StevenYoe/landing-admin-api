@@ -102,10 +102,6 @@ class ProductCatalogController extends Controller
         // Fix: Pastikan URL tidak duplikat
         $filePath = $catalog->$fileField;
         
-        // Bersihkan path dari duplikasi storage URL
-        $filePath = str_replace('http://127.0.0.1:8002/storage/', '', $filePath);
-        $filePath = ltrim($filePath, '/');
-        
         // Generate clean URL
         $fileUrl = config('app.url') . '/storage/' . $filePath;
         
