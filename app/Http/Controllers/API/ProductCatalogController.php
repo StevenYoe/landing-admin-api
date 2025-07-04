@@ -129,10 +129,10 @@ class ProductCatalogController extends Controller
      */
     public function store(Request $request)
     {
+        // Fixed validation rules to accept files instead of strings
         $validator = Validator::make($request->all(), [
-            'pct_catalog_id' => 'required|string|max:255',
-            'pct_catalog_en' => 'required|string|max:255',
-            'pct_file' => 'nullable|file|max:51200', // 50MB limit
+            'pct_catalog_id' => 'nullable|file|max:51200', // 50MB limit for Indonesian catalog
+            'pct_catalog_en' => 'nullable|file|max:51200', // 50MB limit for English catalog
             'user_id' => 'nullable|integer',
             'employee_id' => 'nullable|string',
         ]);
@@ -162,12 +162,20 @@ class ProductCatalogController extends Controller
         // Use employee ID for created_by
         $validated['pct_created_by'] = $employeeId;
         
-        // Handle file upload
-        if ($request->hasFile('pct_file')) {
-            $file = $request->file('pct_file');
-            $filename = time() . '_' . $file->getClientOriginalName();
+        // Handle Indonesian catalog file upload
+        if ($request->hasFile('pct_catalog_id')) {
+            $file = $request->file('pct_catalog_id');
+            $filename = $file->getClientOriginalName();
             $path = $file->storeAs('catalogs', $filename, 'public');
-            $validated['pct_file'] = $path;
+            $validated['pct_catalog_id'] = $path;
+        }
+        
+        // Handle English catalog file upload
+        if ($request->hasFile('pct_catalog_en')) {
+            $file = $request->file('pct_catalog_en');
+            $filename = $file->getClientOriginalName();
+            $path = $file->storeAs('catalogs', $filename, 'public');
+            $validated['pct_catalog_en'] = $path;
         }
         
         // Remove user_id and employee_id from the validated data as they're not columns in the catalog table
@@ -234,10 +242,10 @@ class ProductCatalogController extends Controller
             ], 404);
         }
         
+        // Fixed validation rules to accept files instead of strings
         $validator = Validator::make($request->all(), [
-            'pct_catalog_id' => 'required|string|max:255',
-            'pct_catalog_en' => 'required|string|max:255',
-            'pct_file' => 'nullable|file|max:51200', // 50MB limit
+            'pct_catalog_id' => 'nullable|file|max:51200', // 50MB limit for Indonesian catalog
+            'pct_catalog_en' => 'nullable|file|max:51200', // 50MB limit for English catalog
             'user_id' => 'nullable|integer',
             'employee_id' => 'nullable|string',
         ]);
@@ -267,20 +275,34 @@ class ProductCatalogController extends Controller
         // Use employee ID for updated_by
         $validated['pct_updated_by'] = $employeeId;
         
-        // Store old file path if exists
-        $oldFile = $catalog->pct_file ?? null;
+        // Store old file paths if they exist
+        $oldIdFile = $catalog->pct_catalog_id ?? null;
+        $oldEnFile = $catalog->pct_catalog_en ?? null;
         
-        // Handle file upload
-        if ($request->hasFile('pct_file')) {
+        // Handle Indonesian catalog file upload
+        if ($request->hasFile('pct_catalog_id')) {
             // Remove old file if exists
-            if ($oldFile && Storage::disk('public')->exists($oldFile)) {
-                Storage::disk('public')->delete($oldFile);
+            if ($oldIdFile && Storage::disk('public')->exists($oldIdFile)) {
+                Storage::disk('public')->delete($oldIdFile);
             }
             
-            $file = $request->file('pct_file');
-            $filename = time() . '_' . $file->getClientOriginalName();
+            $file = $request->file('pct_catalog_id');
+            $filename = $file->getClientOriginalName();
             $path = $file->storeAs('catalogs', $filename, 'public');
-            $validated['pct_file'] = $path;
+            $validated['pct_catalog_id'] = $path;
+        }
+        
+        // Handle English catalog file upload
+        if ($request->hasFile('pct_catalog_en')) {
+            // Remove old file if exists
+            if ($oldEnFile && Storage::disk('public')->exists($oldEnFile)) {
+                Storage::disk('public')->delete($oldEnFile);
+            }
+            
+            $file = $request->file('pct_catalog_en');
+            $filename = $file->getClientOriginalName();
+            $path = $file->storeAs('catalogs', $filename, 'public');
+            $validated['pct_catalog_en'] = $path;
         }
         
         // Remove user_id and employee_id from the validated data
@@ -306,7 +328,7 @@ class ProductCatalogController extends Controller
 
     /**
      * Remove the specified product catalog resource from storage.
-     * Also deletes the associated file if it exists.
+     * Also deletes the associated files if they exist.
      *
      * @param  int  $id
      * @return \Illuminate\Http\JsonResponse
@@ -322,9 +344,14 @@ class ProductCatalogController extends Controller
             ], 404);
         }
         
-        // Remove file if exists
-        if (isset($catalog->pct_file) && $catalog->pct_file) {
-            Storage::disk('public')->delete($catalog->pct_file);
+        // Remove Indonesian catalog file if exists
+        if (isset($catalog->pct_catalog_id) && $catalog->pct_catalog_id) {
+            Storage::disk('public')->delete($catalog->pct_catalog_id);
+        }
+        
+        // Remove English catalog file if exists
+        if (isset($catalog->pct_catalog_en) && $catalog->pct_catalog_en) {
+            Storage::disk('public')->delete($catalog->pct_catalog_en);
         }
         
         $catalog->delete();
