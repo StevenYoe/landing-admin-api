@@ -20,10 +20,13 @@ class Testimonial extends Model
     // The attributes that are mass assignable
     protected $fillable = [
         't_name',             // Name of the person giving the testimonial
+        't_gender',           // Gender of the person
         't_description_id',   // Testimonial description in Indonesian
         't_description_en',   // Testimonial description in English
+        't_product_id',       // Testimonial product name in Indonesian
+        't_product_en',       // Testimonial product name in English
         't_type',             // Type/category of testimonial
-        't_gender',           // Gender of the person
+        't_link',             // Link of testimonial
         't_image'             // Image path or filename
     ];
 }
