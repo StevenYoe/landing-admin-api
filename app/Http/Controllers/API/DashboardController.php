@@ -14,7 +14,6 @@ use App\Models\Recipe;
 use App\Models\RecipeCategory;
 use App\Models\Vacancy;
 use App\Models\Department;
-use App\Models\Employment;
 use App\Models\Experience;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
@@ -178,14 +177,13 @@ class DashboardController extends Controller
                 ->where('v_is_active', true)
                 ->count();
             
-            // Count departments, employments, and experiences
+            // Count departments and experiences
             $totalDepartments = Department::count();
-            $totalEmployments = Employment::count();
             $totalExperiences = Experience::count();
             
             // Get latest vacancies with relationships (try-catch for safety)
             try {
-                $latestVacancies = Vacancy::with(['department', 'employment', 'experience'])
+                $latestVacancies = Vacancy::with(['department', 'experience'])
                     ->orderBy('v_created_at', 'desc')
                     ->take(10)
                     ->get()
@@ -200,7 +198,6 @@ class DashboardController extends Controller
                             'v_posted_date' => $vacancy->v_posted_date,
                             'v_closed_date' => $vacancy->v_closed_date,
                             'department_name' => $vacancy->department ? $vacancy->department->da_title_en : 'N/A',
-                            'employment_type' => $vacancy->employment ? $vacancy->employment->e_title_en : 'N/A',
                             'experience_level' => $vacancy->experience ? $vacancy->experience->ex_title_en : 'N/A'
                         ];
                     });
@@ -226,7 +223,6 @@ class DashboardController extends Controller
                 'active_vacancies' => $activeVacancies,
                 'urgent_vacancies' => $urgentVacancies,
                 'total_departments' => $totalDepartments,
-                'total_employments' => $totalEmployments,
                 'total_experiences' => $totalExperiences,
                 'latest_vacancies' => $latestVacancies,
                 'vacancies_by_department' => $vacanciesByDepartment

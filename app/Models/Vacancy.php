@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 
 // Vacancy model represents the 'career_vacancies' table in the 'pazar' database connection.
-// It stores information about job vacancies, including multilingual titles, descriptions, requirements, responsibilities, department, employment, experience, posting/closing dates, urgency, active status, and user relationships.
+// It stores information about job vacancies, including multilingual titles, descriptions, requirements, responsibilities, department, experience, posting/closing dates, urgency, active status, and user relationships.
 class Vacancy extends Model
 {
     // Use the 'pazar' database connection for this model
@@ -26,7 +26,6 @@ class Vacancy extends Model
         'v_title_id',              // Vacancy title in Indonesian
         'v_title_en',              // Vacancy title in English
         'v_department_id',         // Foreign key to department
-        'v_employment_id',         // Foreign key to employment type
         'v_experience_id',         // Foreign key to experience level
         'v_type',                  // Type of vacancy
         'v_description_id',        // Description in Indonesian
@@ -58,15 +57,6 @@ class Vacancy extends Model
     public function department()
     {
         return $this->belongsTo(Department::class, 'v_department_id', 'da_id');
-    }
-
-    /**
-     * Get the employment type that owns the vacancy.
-     * Defines a relationship to the Employment model.
-     */
-    public function employment()
-    {
-        return $this->belongsTo(Employment::class, 'v_employment_id', 'e_id');
     }
 
     /**

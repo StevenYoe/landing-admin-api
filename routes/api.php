@@ -25,7 +25,6 @@ use App\Http\Controllers\API\HistoryController;
 use App\Http\Controllers\API\CompanyController;
 use App\Http\Controllers\API\BrandController;
 use App\Http\Controllers\API\DepartmentController;
-use App\Http\Controllers\API\EmploymentController;
 use App\Http\Controllers\API\ExperienceController;
 use App\Http\Controllers\API\VacancyController;
 use App\Http\Controllers\API\CareerInfoController;
@@ -110,11 +109,9 @@ Route::middleware(['api'])->group(function () {
     Route::get('/whypazars/all', [WhyPazarController::class, 'all']);
     Route::apiResource('whypazars', WhyPazarController::class);
     
-    // Career module endpoints (departments, employments, experiences, vacancies, work at pazar, career info, career page)
+    // Career module endpoints (departments, experiences, vacancies, work at pazar, career info, career page)
     Route::get('/departments/all', [DepartmentController::class, 'all']);
     Route::apiResource('departments', DepartmentController::class);
-    Route::get('/employments/all', [EmploymentController::class, 'all']);
-    Route::apiResource('employments', EmploymentController::class);
     Route::get('/experiences/all', [ExperienceController::class, 'all']);
     Route::apiResource('experiences', ExperienceController::class);
     Route::get('/vacancies/all', [VacancyController::class, 'all']);

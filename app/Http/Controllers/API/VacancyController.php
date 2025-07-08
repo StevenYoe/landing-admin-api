@@ -70,7 +70,7 @@ class VacancyController extends Controller
     
     /**
      * Display a paginated list of vacancies, with optional filters and sorting.
-     * Filters include department, employment, experience, active status, and urgency.
+     * Filters include department, experience, active status, and urgency.
      * Calls autoCheckExpiredVacancies() to ensure expired jobs are not shown as active.
      */
     public function index(Request $request)
@@ -81,20 +81,15 @@ class VacancyController extends Controller
         $sortOrder = $request->input('sort_order', 'desc');
         $perPage = $request->input('per_page', 10);
         $departmentId = $request->input('department_id');
-        $employmentId = $request->input('employment_id');
         $experienceId = $request->input('experience_id');
         $isActive = $request->input('is_active');
         $isUrgent = $request->input('is_urgent');
         
-        $query = Vacancy::with(['department', 'employment', 'experience']);
+        $query = Vacancy::with(['department', 'experience']);
         
         // Apply filters
         if ($departmentId) {
             $query->where('v_department_id', $departmentId);
-        }
-        
-        if ($employmentId) {
-            $query->where('v_employment_id', $employmentId);
         }
         
         if ($experienceId) {
@@ -131,17 +126,12 @@ class VacancyController extends Controller
         $this->autoCheckExpiredVacancies();
         
         // Build the query
-        $query = Vacancy::with(['department', 'employment', 'experience']);
+        $query = Vacancy::with(['department', 'experience']);
         
         // Apply filters
         $departmentId = $request->input('department_id');
         if ($departmentId) {
             $query->where('v_department_id', $departmentId);
-        }
-        
-        $employmentId = $request->input('employment_id');
-        if ($employmentId) {
-            $query->where('v_employment_id', $employmentId);
         }
         
         $experienceId = $request->input('experience_id');
@@ -185,7 +175,6 @@ class VacancyController extends Controller
             'v_title_id' => 'required|string|max:255',
             'v_title_en' => 'required|string|max:255',
             'v_department_id' => 'required|integer|exists:career_departments,da_id',
-            'v_employment_id' => 'required|integer|exists:career_employments,e_id',
             'v_experience_id' => 'required|integer|exists:career_experiences,ex_id',
             'v_type' => 'nullable|string|max:50',
             'v_description_id' => 'required|string',
@@ -239,7 +228,7 @@ class VacancyController extends Controller
         $vacancy = Vacancy::create($validated);
         
         // Load relationships for the response
-        $vacancy->load(['department', 'employment', 'experience']);
+        $vacancy->load(['department', 'experience']);
         
         return response()->json([
             'success' => true,
@@ -249,11 +238,11 @@ class VacancyController extends Controller
     }
 
     /**
-     * Display a single vacancy by its ID, including related department, employment, and experience data.
+     * Display a single vacancy by its ID, including related department and experience data.
      */
     public function show($id)
     {
-        $vacancy = Vacancy::with(['department', 'employment', 'experience', 'createdBy', 'updatedBy'])->find($id);
+        $vacancy = Vacancy::with(['department', 'experience', 'createdBy', 'updatedBy'])->find($id);
         
         if (!$vacancy) {
             return response()->json([
@@ -289,7 +278,6 @@ class VacancyController extends Controller
             'v_title_id' => 'required|string|max:255',
             'v_title_en' => 'required|string|max:255',
             'v_department_id' => 'required|integer|exists:career_departments,da_id',
-            'v_employment_id' => 'required|integer|exists:career_employments,e_id',
             'v_experience_id' => 'required|integer|exists:career_experiences,ex_id',
             'v_type' => 'nullable|string|max:50',
             'v_description_id' => 'required|string',
@@ -343,7 +331,7 @@ class VacancyController extends Controller
         $vacancy->update($validated);
         
         // Load relationships for the response
-        $vacancy->load(['department', 'employment', 'experience']);
+        $vacancy->load(['department', 'experience']);
         
         return response()->json([
             'success' => true,
@@ -376,7 +364,7 @@ class VacancyController extends Controller
     }
     
     /**
-     * Get all active vacancies for the frontend, filtered by department, employment, experience, and urgency.
+     * Get all active vacancies for the frontend, filtered by department, experience, and urgency.
      * Only vacancies that are active and within the posting/closing date range are returned.
      */
     public function getActiveVacancies(Request $request)
@@ -384,7 +372,7 @@ class VacancyController extends Controller
         $this->autoCheckExpiredVacancies();
         
         // Build the query for active vacancies
-        $query = Vacancy::with(['department', 'employment', 'experience'])
+        $query = Vacancy::with(['department', 'experience'])
                 ->where('v_is_active', true)
                 ->where('v_posted_date', '<=', now()->toDateString())
                 ->where(function($q) {
@@ -396,11 +384,6 @@ class VacancyController extends Controller
         $departmentId = $request->input('department_id');
         if ($departmentId) {
             $query->where('v_department_id', $departmentId);
-        }
-        
-        $employmentId = $request->input('employment_id');
-        if ($employmentId) {
-            $query->where('v_employment_id', $employmentId);
         }
         
         $experienceId = $request->input('experience_id');
@@ -436,11 +419,11 @@ class VacancyController extends Controller
         // Determine if the identifier is an ID (numeric) or slug (string)
         if (is_numeric($identifier)) {
             // Search by ID
-            $vacancy = Vacancy::with(['department', 'employment', 'experience'])
+            $vacancy = Vacancy::with(['department', 'experience'])
                     ->find($identifier);
         } else {
             // Search by slug (matching against title)
-            $vacancy = Vacancy::with(['department', 'employment', 'experience'])
+            $vacancy = Vacancy::with(['department', 'experience'])
                     ->where(function($query) use ($identifier) {
                         $query->whereRaw("LOWER(TRIM(REPLACE(v_title_id, ' ', '-'))) = ?", [strtolower($identifier)])
                             ->orWhereRaw("LOWER(TRIM(REPLACE(v_title_en, ' ', '-'))) = ?", [strtolower($identifier)]);
@@ -479,7 +462,7 @@ class VacancyController extends Controller
             ], 422);
         }
         
-        $query = Vacancy::with(['department', 'employment', 'experience'])
+        $query = Vacancy::with(['department', 'experience'])
                 ->where('v_department_id', $departmentId)
                 ->where('v_is_active', true)
                 ->where('v_posted_date', '<=', now()->toDateString())
