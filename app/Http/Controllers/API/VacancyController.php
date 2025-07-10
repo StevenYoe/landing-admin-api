@@ -396,9 +396,9 @@ class VacancyController extends Controller
             $query->where('v_urgent', filter_var($isUrgent, FILTER_VALIDATE_BOOLEAN));
         }
         
-        // Order by urgent first, then by posted date (newest first)
+        // Order by urgent first, then by closed date (near deadline first)
         $query->orderBy('v_urgent', 'desc')
-              ->orderBy('v_posted_date', 'desc');
+              ->orderBy('v_closed_date', 'asc');
         
         // Get the results
         $vacancies = $query->get();
@@ -453,7 +453,7 @@ class VacancyController extends Controller
     {
         $departmentId = $request->input('department_id');
         $currentVacancyId = $request->input('current_vacancy_id');
-        $limit = $request->input('limit', 3);
+        $limit = $request->input('limit', 2);
         
         if (!$departmentId) {
             return response()->json([
